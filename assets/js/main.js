@@ -1,8 +1,4 @@
-const offset = 0
-const limit = 10
-const baseUrl = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`
-
-function convertPokemonToHtml(pokemon) {
+function convertPokemonToli(pokemon) {
     return `
             <li class="pokemon">
                 <span class="number">#001</span>
@@ -20,30 +16,6 @@ function convertPokemonToHtml(pokemon) {
     `
 }
 const pokemonsList = document.querySelector('#pokemonsList')
-try {
-    fetch(baseUrl)
-        .then(response => {
-            const responseJson = response.json()
-            return responseJson
-        })
-        .then(async data => {
-            const pokemons = data.results
-            for (const pokemon of pokemons) {
-                pokemon.data = await fetch(pokemon.url).then(res => res.json())
-            }
-            console.log(pokemons)
-            return pokemons
-        })
-        .then((pokemons) => {
-            debugger
-            for (const pokemon of pokemons) {
-                pokemonsList.innerHTML += convertPokemonToHtml(pokemon)
-            }
-        })
-
-        .catch(error => {
-            console.error(error)
-        })
-} catch (error) {
-    console.error(error)
-}
+pokeApi.getPokemons().then((pokemons = []) => {
+    pokemonsList.innerHTML += pokemons.map(convertPokemonToli).join('')
+}).catch((error) => { console.error('error: ', error) })
